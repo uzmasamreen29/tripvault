@@ -43,6 +43,36 @@ function Dashboard() {
     setLoadingTrips(false);
   }
 };
+
+const handleDelete = async (tripId) => {
+  const confirmed = window.confirm(
+    "Are you sure you want to delete this trip?"
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+
+  try {
+    await axios.delete(
+      `http://localhost:5000/api/trips/${tripId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    fetchTrips();
+  } catch (error) {
+    setTripError(
+      error.response?.data?.message || "Failed to delete trip."
+    );
+  }
+};
+
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
@@ -98,38 +128,64 @@ function Dashboard() {
       <hr style={{ margin: "30px 0", opacity: 0.3 }} />
 
 <h2>My Trips ✈️</h2>
+<button
+  onClick={() => navigate("/create-trip")}
+  style={{ marginTop: "15px" }}
+>
+  + Create Trip
+</button>
 
 {loadingTrips && <p>Loading your trips...</p>}
 
 {tripError && <p>{tripError}</p>}
 
-{!loadingTrips && !tripError && trips.length === 0 && (
-  <p>You don't have any trips yet. Create your first trip! 🌍</p>
-)}
-
 {!loadingTrips && trips.length > 0 && (
   <div>
     {trips.map((trip) => (
-      <div key={trip._id}>
+      <div
+        key={trip._id}
+        style={{
+          border: "1px solid #ccc",
+          padding: "20px",
+          marginTop: "20px",
+          borderRadius: "8px",
+        }}
+      >
         <h3>{trip.title}</h3>
 
         <p>📍 {trip.destination}</p>
 
         <p>
-          📅 {new Date(trip.startDate).toLocaleDateString()} -{" "}
-          {new Date(trip.endDate).toLocaleDateString()}
+          📅{" "}
+          {trip.startDate
+            ? new Date(trip.startDate).toLocaleDateString()
+            : "N/A"}
+          {" - "}
+          {trip.endDate
+            ? new Date(trip.endDate).toLocaleDateString()
+            : "N/A"}
         </p>
 
-        <p>⭐ {trip.rating}/5</p>
+        <p>⭐ {trip.rating || "Not rated"}/5</p>
 
-        <p>{trip.description}</p>
+        <p>{trip.description || "No description"}</p>
 
-        <hr />
+        <button
+          onClick={() => navigate(`/edit-trip/${trip._id}`)}
+        >
+          Edit
+        </button>
+
+        <button
+          onClick={() => handleDelete(trip._id)}
+          style={{ marginLeft: "10px" }}
+        >
+          Delete
+        </button>
       </div>
     ))}
   </div>
 )}
-
       <button
         onClick={handleLogout}
         style={{ marginTop: "25px" }}
