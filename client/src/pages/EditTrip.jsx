@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import "../trip-form.css";
 
 function EditTrip() {
   const { id } = useParams();
@@ -106,19 +107,29 @@ function EditTrip() {
   };
 
   if (loading) {
-    return <p>Loading trip...</p>;
-  }
-
   return (
-    <div>
+    <div className="trip-form-page">
+      <div className="trip-form-card">
+        <p className="trip-form-loading">Loading trip...</p>
+      </div>
+    </div>
+  );
+}
+
+return (
+  <div className="trip-form-page">
+    <div className="trip-form-card">
+
       <h2>Edit Trip ✏️</h2>
 
-      {error && <p>{error}</p>}
+      {error && (
+        <p className="trip-form-error">{error}</p>
+      )}
 
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title</label>
-          <br />
+
+        <div className="trip-form-group">
+          <label>Trip Title</label>
           <input
             type="text"
             name="title"
@@ -128,11 +139,8 @@ function EditTrip() {
           />
         </div>
 
-        <br />
-
-        <div>
+        <div className="trip-form-group">
           <label>Destination</label>
-          <br />
           <input
             type="text"
             name="destination"
@@ -142,11 +150,8 @@ function EditTrip() {
           />
         </div>
 
-        <br />
-
-        <div>
+        <div className="trip-form-group">
           <label>Start Date</label>
-          <br />
           <input
             type="date"
             name="startDate"
@@ -155,11 +160,8 @@ function EditTrip() {
           />
         </div>
 
-        <br />
-
-        <div>
+        <div className="trip-form-group">
           <label>End Date</label>
-          <br />
           <input
             type="date"
             name="endDate"
@@ -168,23 +170,18 @@ function EditTrip() {
           />
         </div>
 
-        <br />
-
-        <div>
+        <div className="trip-form-group">
           <label>Description</label>
-          <br />
           <textarea
             name="description"
             value={formData.description}
             onChange={handleChange}
+            placeholder="Update your trip description..."
           />
         </div>
 
-        <br />
-
-        <div>
+        <div className="trip-form-group">
           <label>Rating (1–5)</label>
-          <br />
           <input
             type="number"
             name="rating"
@@ -195,22 +192,26 @@ function EditTrip() {
           />
         </div>
 
-        <br />
+        <div className="trip-form-buttons">
 
-        <button type="submit" disabled={saving}>
-          {saving ? "Saving..." : "Save Changes"}
-        </button>
+          <button type="submit" disabled={saving}>
+            {saving ? "Saving..." : "💾 Save Changes"}
+          </button>
 
-        <button
-          type="button"
-          onClick={() => navigate("/dashboard")}
-          style={{ marginLeft: "10px" }}
-        >
-          Cancel
-        </button>
+          <button
+            type="button"
+            onClick={() => navigate("/dashboard")}
+          >
+            Cancel
+          </button>
+
+        </div>
+
       </form>
+
     </div>
-  );
+  </div>
+);
 }
 
 export default EditTrip;

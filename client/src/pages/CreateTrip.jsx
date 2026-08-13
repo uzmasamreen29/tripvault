@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../trip-form.css";
 
 function CreateTrip() {
   const navigate = useNavigate();
@@ -64,105 +65,98 @@ function CreateTrip() {
   };
 
   return (
-    <div>
-      <h2>Create New Trip ✈️</h2>
+    <div className="trip-form-page">
+      <div className="trip-form-card">
 
-      {error && <p>{error}</p>}
+        <h2>Create New Trip ✈️</h2>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title</label>
-          <br />
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-        </div>
+        {error && (
+          <p className="trip-form-error">{error}</p>
+        )}
 
-        <br />
+        <form onSubmit={handleSubmit}>
 
-        <div>
-          <label>Destination</label>
-          <br />
-          <input
-            type="text"
-            name="destination"
-            value={formData.destination}
-            onChange={handleChange}
-            required
-          />
-        </div>
+          <div className="trip-form-group">
+            <label>Trip Title</label>
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="e.g. Goa Beach Vacation"
+              required
+            />
+          </div>
 
-        <br />
+          <div className="trip-form-group">
+            <label>Destination</label>
+            <input
+              type="text"
+              name="destination"
+              value={formData.destination}
+              onChange={handleChange}
+              placeholder="e.g. Goa, India"
+              required
+            />
+          </div>
 
-        <div>
-          <label>Start Date</label>
-          <br />
-          <input
-            type="date"
-            name="startDate"
-            value={formData.startDate}
-            onChange={handleChange}
-          />
-        </div>
+          <div className="trip-form-group">
+            <label>Start Date</label>
+            <input
+              type="date"
+              name="startDate"
+              value={formData.startDate}
+              onChange={handleChange}
+            />
+          </div>
 
-        <br />
+          <div className="trip-form-group">
+            <label>End Date</label>
+            <input
+              type="date"
+              name="endDate"
+              value={formData.endDate}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div>
-          <label>End Date</label>
-          <br />
-          <input
-            type="date"
-            name="endDate"
-            value={formData.endDate}
-            onChange={handleChange}
-          />
-        </div>
+          <div className="trip-form-group">
+            <label>Description</label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Write about your trip..."
+            />
+          </div>
 
-        <br />
+          <div className="trip-form-group">
+            <label>Rating (1–5)</label>
+            <input
+              type="number"
+              name="rating"
+              min="1"
+              max="5"
+              value={formData.rating}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div>
-          <label>Description</label>
-          <br />
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-          />
-        </div>
+          <div className="trip-form-buttons">
+            <button type="submit" disabled={loading}>
+              {loading ? "Creating..." : "Create Trip"}
+            </button>
 
-        <br />
+            <button
+              type="button"
+              onClick={() => navigate("/dashboard")}
+            >
+              Cancel
+            </button>
+          </div>
 
-        <div>
-          <label>Rating (1–5)</label>
-          <br />
-          <input
-            type="number"
-            name="rating"
-            min="1"
-            max="5"
-            value={formData.rating}
-            onChange={handleChange}
-          />
-        </div>
-
-        <br />
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Creating..." : "Create Trip"}
-        </button>
-
-        <button
-          type="button"
-          onClick={() => navigate("/dashboard")}
-          style={{ marginLeft: "10px" }}
-        >
-          Cancel
-        </button>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

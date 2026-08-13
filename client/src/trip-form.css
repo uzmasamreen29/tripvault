@@ -1,0 +1,254 @@
+/* =========================
+   CREATE TRIP PAGE
+   ========================= */
+
+.trip-form-page {
+  min-height: 100vh;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 40px 20px;
+  box-sizing: border-box;
+
+  /* Different image from Register and Dashboard */
+  background-image:
+    linear-gradient(
+      rgba(0, 0, 0, 0.48),
+      rgba(0, 0, 0, 0.48)
+    ),
+    url("https://images.unsplash.com/photo-1527631746610-bca00a040d60");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+
+/* =========================
+   FORM CARD
+   ========================= */
+
+.trip-form-card {
+  width: 100%;
+  max-width: 600px;
+
+  padding: 35px;
+  box-sizing: border-box;
+
+  background: rgba(255, 255, 255, 0.94);
+
+  border-radius: 20px;
+
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+
+  backdrop-filter: blur(8px);
+}
+
+
+/* =========================
+   HEADING
+   ========================= */
+
+.trip-form-card h2 {
+  margin: 0 0 25px;
+
+  text-align: center;
+
+  color: #234f35;
+  font-size: 28px;
+}
+
+
+/* =========================
+   ERROR MESSAGE
+   ========================= */
+
+.trip-form-error {
+  padding: 12px;
+
+  margin-bottom: 20px;
+
+  background: #f8d7da;
+  color: #842029;
+
+  border: 1px solid #f1aeb5;
+  border-radius: 8px;
+
+  text-align: center;
+}
+
+
+/* =========================
+   FORM GROUP
+   ========================= */
+
+.trip-form-group {
+  margin-bottom: 18px;
+}
+
+.trip-form-group label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #333;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/* =========================
+   INPUTS
+   ========================= */
+
+.trip-form-group input,
+.trip-form-group textarea {
+  width: 100%;
+
+  padding: 12px 14px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d5ddd7;
+  border-radius: 9px;
+
+  background: #fff;
+
+  color: #222;
+
+  font-size: 15px;
+
+  outline: none;
+
+  transition: 0.2s ease;
+}
+
+.trip-form-group input:focus,
+.trip-form-group textarea:focus {
+  border-color: #3a644d;
+
+  box-shadow: 0 0 0 2px rgba(58, 100, 77, 0.12);
+}
+
+
+/* =========================
+   TEXTAREA
+   ========================= */
+
+.trip-form-group textarea {
+  min-height: 110px;
+
+  resize: vertical;
+
+  font-family: inherit;
+}
+
+
+/* =========================
+   BUTTONS
+   ========================= */
+
+.trip-form-buttons {
+  display: flex;
+
+  gap: 12px;
+
+  margin-top: 25px;
+}
+
+.trip-form-buttons button {
+  flex: 1;
+
+  padding: 12px;
+
+  border: none;
+  border-radius: 9px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+
+/* Create */
+
+.trip-form-buttons button[type="submit"] {
+  background: #3a644d;
+  color: white;
+}
+
+.trip-form-buttons button[type="submit"]:hover {
+  background: #294d39;
+
+  transform: translateY(-1px);
+}
+
+
+/* Cancel */
+
+.trip-form-buttons button[type="button"] {
+  background: #777;
+  color: white;
+}
+
+.trip-form-buttons button[type="button"]:hover {
+  background: #555;
+
+  transform: translateY(-1px);
+}
+
+
+/* Disabled */
+
+.trip-form-buttons button:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 600px) {
+  .trip-form-page {
+    padding: 20px 12px;
+  }
+
+  .trip-form-card {
+    padding: 25px 20px;
+  }
+
+  .trip-form-card h2 {
+    font-size: 24px;
+  }
+
+  .trip-form-buttons {
+    flex-direction: column;
+  }
+
+  .trip-form-buttons button {
+    width: 100%;
+  }
+}
+/* =========================
+   EDIT TRIP LOADING
+   ========================= */
+
+.trip-form-loading {
+  text-align: center;
+  color: #234f35;
+  font-size: 18px;
+  font-weight: 600;
+}

@@ -33,8 +33,8 @@ function Register() {
   };
 
   return (
-    <div className="container">
-      <div className="card">
+    <div className="register-page">
+      <div className="register-card">
         <h1>✈️ TripVault</h1>
         <p className="subtitle">
   Create your TripVault account

@@ -13,7 +13,7 @@ function App() {
         <Route path="/" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/create-trip" element={<CreateTrip />} />     
+        <Route path="/create-trip" element={<CreateTrip />} />
         <Route path="/edit-trip/:id" element={<EditTrip />} />
       </Routes>
     </BrowserRouter>

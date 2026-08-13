@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import "../App.css";
 function Dashboard() {
   const [user, setUser] = useState(null);
   const [trips, setTrips] = useState([]);
@@ -139,49 +139,55 @@ const handleDelete = async (tripId) => {
 
 {tripError && <p>{tripError}</p>}
 
+{!loadingTrips && !tripError && trips.length === 0 && (
+  <div className="empty-state">
+    <h3>No trips yet 🌍</h3>
+    <p>Start creating your travel memories!</p>
+  </div>
+)}
+
 {!loadingTrips && trips.length > 0 && (
-  <div>
+  <div className="trip-grid">
     {trips.map((trip) => (
-      <div
-        key={trip._id}
-        style={{
-          border: "1px solid #ccc",
-          padding: "20px",
-          marginTop: "20px",
-          borderRadius: "8px",
-        }}
-      >
+      <div className="trip-card" key={trip._id}>
         <h3>{trip.title}</h3>
 
-        <p>📍 {trip.destination}</p>
+        <p className="trip-destination">
+          📍 {trip.destination}
+        </p>
 
         <p>
           📅{" "}
           {trip.startDate
             ? new Date(trip.startDate).toLocaleDateString()
             : "N/A"}
-          {" - "}
+          {" → "}
           {trip.endDate
             ? new Date(trip.endDate).toLocaleDateString()
             : "N/A"}
         </p>
 
-        <p>⭐ {trip.rating || "Not rated"}/5</p>
+        <p className="trip-rating">
+          ⭐ {trip.rating || "Not rated"}/5
+        </p>
 
-        <p>{trip.description || "No description"}</p>
+        <p>
+          {trip.description || "No description added."}
+        </p>
 
-        <button
-          onClick={() => navigate(`/edit-trip/${trip._id}`)}
-        >
-          Edit
-        </button>
+        <div className="trip-actions">
+          <button
+            onClick={() => navigate(`/edit-trip/${trip._id}`)}
+          >
+            ✏️ Edit
+          </button>
 
-        <button
-          onClick={() => handleDelete(trip._id)}
-          style={{ marginLeft: "10px" }}
-        >
-          Delete
-        </button>
+          <button
+            onClick={() => handleDelete(trip._id)}
+          >
+            🗑️ Delete
+          </button>
+        </div>
       </div>
     ))}
   </div>
