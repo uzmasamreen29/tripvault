@@ -17,12 +17,17 @@ function CreateTrip() {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleImageChange = (e) => {
+    setSelectedImage(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
@@ -39,7 +44,8 @@ function CreateTrip() {
       setLoading(true);
       setError("");
 
-      await axios.post(
+      // Create trip
+      const response = await axios.post(
         "http://localhost:5000/api/trips",
         {
           ...formData,
@@ -53,6 +59,25 @@ function CreateTrip() {
           },
         }
       );
+
+      const tripId = response.data.trip._id;
+
+      // Upload image if selected
+      if (selectedImage) {
+        const imageData = new FormData();
+        imageData.append("image", selectedImage);
+
+        await axios.post(
+          `http://localhost:5000/api/trips/${tripId}/upload`,
+          imageData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+      }
 
       navigate("/dashboard");
     } catch (error) {
@@ -140,6 +165,25 @@ function CreateTrip() {
               value={formData.rating}
               onChange={handleChange}
             />
+          </div>
+
+          {/* Trip Photo */}
+          <div className="trip-form-group">
+            <label>Trip Photo</label>
+
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+
+            {selectedImage && (
+  <img
+    src={URL.createObjectURL(selectedImage)}
+    alt="Trip preview"
+    className="trip-image-preview"
+  />
+)} 
           </div>
 
           <div className="trip-form-buttons">

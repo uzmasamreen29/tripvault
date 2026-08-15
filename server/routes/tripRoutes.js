@@ -1,5 +1,6 @@
 const express = require("express");
 const Trip = require("../models/Trip");
+const upload = require("../middleware/upload");
 const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
@@ -142,6 +143,59 @@ router.delete("/:id", authMiddleware, async (req, res) => {
     res.status(500).json({
       message: "Server error",
       error: error.message,
+    });
+  }
+});
+router.post(
+  "/:id/upload",
+  authMiddleware,
+  upload.single("image"),
+  async (req, res) => {
+  try {
+    const trip = await Trip.findById(req.params.id);
+
+    if (!trip) {
+      return res.status(404).json({
+        message: "Trip not found",
+      });
+    }
+
+    // Check ownership
+    if (trip.user.toString() !== req.user.id) {
+      return res.status(403).json({
+        message: "Not authorized to upload to this trip",
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({
+        message: "Please upload an image",
+      });
+    }
+
+    // Cloudinary URL
+    const imageUrl = req.file.path;
+
+    // Add image to photos array
+    trip.photos.push(imageUrl);
+
+    // First uploaded image becomes cover image
+    if (!trip.coverImage) {
+      trip.coverImage = imageUrl;
+    }
+
+    await trip.save();
+
+    res.status(200).json({
+      message: "Photo uploaded successfully",
+      imageUrl,
+      trip,
+    });
+  } catch (error) {
+    console.error("Upload error:", error);
+
+    res.status(500).json({
+      message: "Failed to upload photo",
     });
   }
 });

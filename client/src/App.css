@@ -31,7 +31,14 @@
 /* =========================
    DASHBOARD CARD
    ========================= */
-
+.trip-cover-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  display: block;
+}
 .container .card {
   width: 100% !important;
   max-width: 1000px !important;

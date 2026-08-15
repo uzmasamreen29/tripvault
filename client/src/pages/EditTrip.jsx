@@ -6,7 +6,7 @@ import "../trip-form.css";
 function EditTrip() {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const [selectedImage, setSelectedImage] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     destination: "",
@@ -71,6 +71,10 @@ function EditTrip() {
       [e.target.name]: e.target.value,
     });
   };
+ 
+   const handleImageChange = (e) => {
+  setSelectedImage(e.target.files[0]);
+}; 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,23 +84,41 @@ function EditTrip() {
     try {
       setSaving(true);
       setError("");
+   
+        await axios.put(
+  `http://localhost:5000/api/trips/${id}`,
+  {
+    ...formData,
+    rating: formData.rating
+      ? Number(formData.rating)
+      : undefined,
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
 
-      await axios.put(
-        `http://localhost:5000/api/trips/${id}`,
-        {
-          ...formData,
-          rating: formData.rating
-            ? Number(formData.rating)
-            : undefined,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+// Upload new photo if selected
+if (selectedImage) {
+  const imageData = new FormData();
+  imageData.append("image", selectedImage);
 
-      navigate("/dashboard");
+  await axios.post(
+    `http://localhost:5000/api/trips/${id}/upload`,
+    imageData,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+}
+
+navigate("/dashboard");
+
     } catch (error) {
       setError(
         error.response?.data?.message || "Failed to update trip."
@@ -191,6 +213,24 @@ return (
             onChange={handleChange}
           />
         </div>
+  
+        <div className="trip-form-group">
+  <label>Trip Photo</label>
+
+  <input
+    type="file"
+    accept="image/*"
+    onChange={handleImageChange}
+  />
+
+  {selectedImage && (
+    <img
+      src={URL.createObjectURL(selectedImage)}
+      alt="Trip preview"
+      className="trip-image-preview"
+    />
+  )}
+</div>
 
         <div className="trip-form-buttons">
 
