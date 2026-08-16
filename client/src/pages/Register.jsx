@@ -6,6 +6,7 @@ import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 function Register() {
   const [formData, setFormData] = useState({
     name: "",
+    username:"",
     email: "",
     password: "",
   });
@@ -51,6 +52,19 @@ function Register() {
     onChange={handleChange}
   />
 </div>
+  
+<div className="form-group">
+  <label>Username</label>
+  <input
+    type="text"
+    name="username"
+    value={formData.username}
+    onChange={handleChange}
+    placeholder="e.g. uzma_travels"
+    required
+  />
+</div>
+    
 
          <div className="input-group">
   <FaEnvelope className="icon" />

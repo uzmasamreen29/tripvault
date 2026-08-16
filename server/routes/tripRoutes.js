@@ -179,11 +179,8 @@ router.post(
     // Add image to photos array
     trip.photos.push(imageUrl);
 
-    // First uploaded image becomes cover image
-    if (!trip.coverImage) {
-      trip.coverImage = imageUrl;
-    }
-
+    // Latest uploaded image becomes cover image
+trip.coverImage = imageUrl;
     await trip.save();
 
     res.status(200).json({

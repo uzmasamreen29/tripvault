@@ -5,10 +5,14 @@ import "../App.css";
 function Dashboard() {
   const [user, setUser] = useState(null);
   const [trips, setTrips] = useState([]);
+  const [showProfileEdit, setShowProfileEdit] = useState(false);
+  const [profileUsername, setProfileUsername] = useState("");
+  const [profileBio, setProfileBio] = useState("");
+  const [profileSaving, setProfileSaving] = useState(false);
   const [loadingTrips, setLoadingTrips] = useState(true);
   const [tripError, setTripError] = useState("");
   const navigate = useNavigate();
-
+  
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
@@ -44,7 +48,7 @@ function Dashboard() {
   }
 };
 
-const handleDelete = async (tripId) => {
+  const handleDelete = async (tripId) => {
   const confirmed = window.confirm(
     "Are you sure you want to delete this trip?"
   );
@@ -93,6 +97,8 @@ const handleDelete = async (tripId) => {
         );
 
         setUser(response.data);
+        setProfileUsername(response.data.username || "");
+setProfileBio(response.data.bio || "");
       } catch (error) {
         localStorage.removeItem("token");
         navigate("/login");
@@ -109,6 +115,41 @@ const handleDelete = async (tripId) => {
   if (!user) {
     return <h2>Loading...</h2>;
   }
+  
+  const handleProfileUpdate = async (e) => {
+  e.preventDefault();
+
+  const token = localStorage.getItem("token");
+
+  try {
+    setProfileSaving(true);
+
+    const response = await axios.put(
+      "http://localhost:5000/api/users/profile",
+      {
+        username: profileUsername,
+        bio: profileBio,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    setUser(response.data.user);
+    setShowProfileEdit(false);
+
+  } catch (error) {
+    alert(
+      error.response?.data?.message ||
+      "Failed to update profile."
+    );
+  } finally {
+    setProfileSaving(false);
+  }
+};
+
 
   return (
   <div className="container">
@@ -149,7 +190,7 @@ const handleDelete = async (tripId) => {
 {!loadingTrips && trips.length > 0 && (
   <div className="trip-grid">
     {trips.map((trip) => (
-      <div className="trip-card" key={trip._id}>
+      <div className="trip-card" key={trip._id}  onClick={() => navigate(`/trip/${trip._id}`)}>
       {trip.coverImage && (
   <img
     src={trip.coverImage}
@@ -184,13 +225,19 @@ const handleDelete = async (tripId) => {
 
         <div className="trip-actions">
           <button
-            onClick={() => navigate(`/edit-trip/${trip._id}`)}
+            onClick={(e) => {
+  e.stopPropagation();
+  navigate(`/edit-trip/${trip._id}`);
+}}
           >
             ✏️ Edit
           </button>
 
           <button
-            onClick={() => handleDelete(trip._id)}
+            onClick={(e) => {
+  e.stopPropagation();
+  handleDelete(trip._id);
+}}
           >
             🗑️ Delete
           </button>
@@ -199,6 +246,52 @@ const handleDelete = async (tripId) => {
     ))}
   </div>
 )}
+<button
+  onClick={() => setShowProfileEdit(!showProfileEdit)}
+>
+  ✏️ Edit Profile
+</button>
+
+{showProfileEdit && (
+     <form
+  className="profile-edit-form"
+  onSubmit={handleProfileUpdate}
+>
+
+    <input
+      type="text"
+      value={profileUsername}
+      onChange={(e) => setProfileUsername(e.target.value)}
+      placeholder="Username"
+      required
+    />
+
+    <textarea
+      value={profileBio}
+      onChange={(e) => setProfileBio(e.target.value)}
+      placeholder="Tell something about yourself..."
+    />
+    
+   <div className="profile-edit-buttons">
+  <button type="submit" disabled={profileSaving}>
+    {profileSaving ? "Saving..." : "Save Profile"}
+  </button>
+
+  <button
+    type="button"
+    onClick={() => setShowProfileEdit(false)}
+  >
+    Cancel
+  </button>
+</div>
+    
+  </form>
+)}
+     <button
+  onClick={() => navigate(`/profile/${user.username}`)}
+>
+  👤 My Profile
+</button>
       <button
         onClick={handleLogout}
         style={{ marginTop: "25px" }}

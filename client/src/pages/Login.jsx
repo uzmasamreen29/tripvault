@@ -1,6 +1,7 @@
 import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import "./Login.css";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -37,35 +38,54 @@ function Login() {
   };
 
   return (
-    <div className="container">
-      <div className="card">
-        <h1>Login</h1>
-        <p className="subtitle">
-  Welcome back to TripVault
-</p>
+    <div className="login-page">
+      <div className="login-card">
+
+        <div className="login-icon">✈️</div>
+
+        <h1>Welcome Back!</h1>
+
+        <p className="login-subtitle">
+          Sign in to continue your TripVault journey
+        </p>
+
         <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter Email"
-            value={formData.email}
-            onChange={handleChange}
-          />
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter Password"
-            value={formData.password}
-            onChange={handleChange}
-          />
+          <div className="login-field">
+            <label>Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-          <button type="submit">Login</button>
+          <div className="login-field">
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <button type="submit" className="login-button">
+            Login ✈️
+          </button>
+
         </form>
 
-        <p style={{ marginTop: "15px", textAlign: "center" }}>
-          Don't have an account? <Link to="/">Register</Link>
+        <p className="login-register">
+          Don't have an account?
+          <Link to="/"> Register</Link>
         </p>
+
       </div>
     </div>
   );

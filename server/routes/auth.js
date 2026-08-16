@@ -11,8 +11,13 @@ router.post("/register", async (req, res) => {
 
     try {
 
-        const { name, email, password } = req.body;
-
+        const { name, username, email, password } = req.body;
+  
+       if (!username) {
+  return res.status(400).json({
+    message: "Username is required",
+  });
+}
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
@@ -31,6 +36,7 @@ router.post("/register", async (req, res) => {
         // Create new user
         const user = new User({
             name,
+            username,
             email,
             password: hashedPassword
         });
